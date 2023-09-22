@@ -41,12 +41,14 @@ The generated data is in `samples/bsp_ae_out/udf_data`.
 After UDF prediction, we should first train the mesh extraction to generate mesh,
 ```cd mesh_extract```
 ```python tiny_udf_net.py --train```
-Next, we should generate mesh with the pretrained network,
+Next, we should generate mesh with the pretrained network, 
 
 ```python tiny_udf_net.py```
 
+the generated mesh is in `samples/bsp_ae_out/udf_data/test/*.off`. When you visualize the mesh in Meshlab, you should choose Back-Face module as Double and Shading module as Face, because the generated mesh normal is not consistent as most UDF-based method.
+
 of course, you can use the pretrained weight in `data/checkpoint256.pth`.
 
-
-
+ How to generate the `data/test.h5` is still a problem. In short, we randomly sample 10000 points on the mesh and obtain the sign of SDF according to the normal orientation. Later, we will add the code. 
+We upgrade the mesh extraction network mentioned in paper. We add several more layers and design more carefully, so the noise near the boundary is less.
 
