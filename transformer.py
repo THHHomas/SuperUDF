@@ -275,7 +275,7 @@ class weight_generator(nn.Module):
         self.fc = nn.Linear(out_dim * 2, out_dim)
         self.acti = nn.Tanh()
 
-    def forward(self, feature1, xyz1, query_xyz, error, shift_chose, point_index, normal=None, fps_num=None, knn_num=12):
+    def forward(self, feature1, xyz1, query_xyz, error, point_index, normal=None, fps_num=None, knn_num=12):
         B, N, _ = xyz1.shape
         M = query_xyz.shape[1]
         # query_xyz = torch.stack(query_xyz)
