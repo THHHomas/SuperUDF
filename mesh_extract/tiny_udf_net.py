@@ -176,15 +176,14 @@ def train():
             batch_label = batch_label.reshape(batchsize, -1)
             ########################################
             out = network(batch_data)
-            loss, acc= network.cal_loss(out, batch_label)
+            loss= network.cal_loss(out, batch_label)
             network.zero_grad()
             loss.backward()
             optimizer.step()
             loss_ob += loss.item()
-            acc_ob += acc.item()
             if epoch % 10 == 9:
                 torch.save(network.state_dict(), "data/checkpoint"+data_phase+".pth")
-        print("Epoch:%d, loss:%f, acc:%f"%(epoch, loss_ob/(idx+1), acc_ob/(idx+1)))
+        print("Epoch:%d, loss:%f"%(epoch, loss_ob/(idx+1)))
         torch.save(network.state_dict(), "data/checkpoint"+data_phase+".pth")
 
 
@@ -251,33 +250,13 @@ def test(predict_path = "./data/npy/", cls="001"):
                 batch_data, batch_label, batch_shift = data[data_idx], label[data_idx], shift[data_idx]
                 batch_data = torch.from_numpy(batch_data).to("cuda")
                 batch_label = torch.from_numpy(batch_label).to("cuda")
-                # batch_data = batch_data.unsqueeze(1)
-                # batch_data[:, 0] = batch_data[:, 0] / batch_data[:, 0].reshape(-1, data_width ** 3).mean(-1).unsqueeze(
-                #     1).unsqueeze(1).unsqueeze(1)
-                # scale = np.random.random() * 1 + 0.5
-                # batch_data = batch_data * scale
-                ############ augmentation ##############
-                # flip_dim = int(np.random.random() * 4) % 4
-                # batch_label = batch_label.reshape(current_size, 2, 2, 2)
-                # if flip_dim<3:
-                #     batch_data = torch.flip(batch_data, (flip_dim+2,))
-                #     batch_label = torch.flip(batch_label, (flip_dim + 1,))
-                #
-                # rot_dim = int(np.random.random() * 4) % 4
-                # if rot_dim < 3:
-                #     batch_data = torch.rot90(batch_data, 1, dims=[rot_dim+2, (rot_dim+1)%3+2])
-                #     batch_label = torch.rot90(batch_label, 1, dims=[rot_dim+1, (rot_dim+1)%3+1])
-                # batch_label = batch_label.reshape(current_size, -1)
 
                 out = network(batch_data)
-                sign, acc = network.predict(out, batch_label)
-                # sign = batch_label
-                # sign, batch_data,
+                sign = network.predict(out, batch_label)
 
                 global grid_dim
                 grid_dim = 256
 
-                acc_ob += acc.item()
                 if construct:
                     past_grid = -1*np.ones((3, grid_dim,grid_dim,grid_dim)).astype(np.int64)
                     sign = sign.detach().cpu().numpy()
@@ -299,7 +278,6 @@ def test(predict_path = "./data/npy/", cls="001"):
                             if vertices.size > 0:
                                 vertices_list.append(vertices)
                             triangles_list.append(triangles)
-        print("acc:%f" % (acc_ob / (idx+1)))
         if construct:
             # ss = vertices_list[1087]
             triangles_list = np.concatenate(triangles_list, 0)

@@ -638,21 +638,8 @@ class vertex_net_even(nn.Module):
         label = label.long().reshape(-1)
         # label = ((label[:,1:] + label[:, 0].unsqueeze(1))%2).reshape(-1)
         loss = F.nll_loss(logit, label, reduction='none').reshape(B, N).mean(-1)
-        loss_sys = F.nll_loss(logit, (label + 1) % 2, reduction='none').reshape(B, N).mean(-1)
-
-        # pred_label = out.argmax(dim=1).reshape(B, N)
-        # label = label.reshape(B, N)
-        # acc = (label == pred_label).float().mean()
-        acc_head = out.argmax(dim=1).reshape(B, N)
-        acc_tail = out.argmin(dim=1).reshape(B, N)
-
-        acc_head = (acc_head == label.reshape(B, N)).float().mean(-1)
-        acc_tail = (acc_tail == label.reshape(B, N)).float().mean(-1)
-        acc = (torch.stack([acc_head, acc_tail]).max(0)[0] + 1e-3).floor().mean()
-
-        # loss_com = torch.stack([loss_sys, loss]).min(0)[0].mean()
         loss_com = loss.mean()
-        return loss_com, acc
+        return loss_com
 
     def predict(self, out, label):
         label = label * label[:, 0].unsqueeze(1)
@@ -673,7 +660,7 @@ class vertex_net_even(nn.Module):
         acc_head = (acc_head == label).float().mean(-1)
         acc_tail = (acc_tail == label).float().mean(-1)
         acc = (torch.stack([acc_head, acc_tail]).max(0)[0] + 1e-3).floor().mean()
-        return sign, acc
+        return sign
 
 
 class vertex_net3(nn.Module):
