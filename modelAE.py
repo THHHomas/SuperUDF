@@ -305,6 +305,8 @@ class BSP_AE(object):
                     c_sign = sign[t]
                 else:
                     c_sign = None
+                # np.save("data/" + '0' + ".npy", c_sign)
+                # exit(0)
                 B = 1
                 expand_index = []
                 expand_point = []

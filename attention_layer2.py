@@ -466,9 +466,10 @@ class bsp_network(nn.Module):
         logit_list = logit_list0 + logit_list1 # + logit_list2
         udf = torch.norm(logit_list, p=2, dim=-1).squeeze()
         udf = udf.cpu().numpy()
-        # tree = KDTree(shifted_pc_refine)
-        # dist, idx = tree.query(query_point[0].cpu().numpy())
-        # udf = np.stack([dist, udf]).min(0)*scale
+        tree = KDTree(clean_point[0].cpu().numpy())
+        dist, idx = tree.query(query_point[0].cpu().numpy())
+        # udf = np.stack([dist, udf]).min(0)
+        near_index = np.where(dist<self.noise_scale)[0]
         udf = np.clip(udf*scale, a_max=self.noise_scale, a_min=0)
         logit_list = logit_list*scale
 
@@ -481,9 +482,9 @@ class bsp_network(nn.Module):
         result = result.reshape(4, self.voxel_dim, self.voxel_dim, self.voxel_dim)
         generate_orientation = np.concatenate(
             [np.expand_dims(udf, axis=1), logit_list.squeeze().cpu().numpy()],
-            -1).squeeze()
+            -1).squeeze()[near_index].squeeze()
         grid_tensor = grid_tensor.numpy()
-        result[:, grid_tensor[:, 0], grid_tensor[:, 1], grid_tensor[:, 2]] = generate_orientation.transpose()
+        result[:, grid_tensor[near_index, 0], grid_tensor[near_index, 1], grid_tensor[near_index, 2]] = generate_orientation.transpose()
         return shifted_pc_refine*scale, 0, detect_point*scale, result
         # return result
 

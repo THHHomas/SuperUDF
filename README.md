@@ -1,4 +1,4 @@
-# BSP-NET-pytorch
+# SuperUDF
 PyTorch 1.4.0 implementation of [SuperUDF: Self-supervised UDF Estimation for Surface Reconstruction](https://arxiv.org/abs/2308.14371).
 
 
@@ -22,7 +22,7 @@ Requirements:
 
 ## Datasets
   We provide the processed dataset of ScanNet in [data.zip](https://pan.baidu.com/s/1CXPiXAbaW4gavEMjDs4RTg) (pwd: 1234). 
-After download the dataset, you should put it in `./data`.
+After download the dataset, you should unzip it and put it in `./data/test.h5`.
 
 
 ## UDF Prediction
@@ -49,6 +49,4 @@ the generated mesh is in `samples/bsp_ae_out/udf_data/test/*.off`. When you visu
 
 of course, you can use the pretrained weight in `data/checkpoint256.pth`.
 
- How to generate the `data/test.h5` is still a problem. In short, we randomly sample 10000 points on the mesh and obtain the sign of SDF according to the normal orientation. Later, we will add the code. 
-We upgrade the mesh extraction network mentioned in paper. We add several more layers and design more carefully, so the noise near the boundary is less.
-
+ How to generate the `data/test.h5` is still a problem. In short, we randomly sample 10000 points on the mesh and obtain the sign of SDF according to the normal orientation. Later, we will add the code.

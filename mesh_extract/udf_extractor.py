@@ -534,7 +534,7 @@ def udf_extractor(data, sign_data):
             for k_idx in range(dim[2]//2):
                 current_grid = data[i_idx*2:i_idx*2 + 3, j_idx*2:j_idx*2 + 3, k_idx*2:k_idx*2 + 3]
                 min_udf = current_grid.min()
-                if min_udf > 0.03:
+                if min_udf > 0.02:
                     continue
                 confidence = np.zeros(12, dtype=np.float)
 
@@ -643,14 +643,14 @@ def udf_extractor(data, sign_data):
 
 if __name__ == '__main__':
 
-    data = np.load("../samples/bsp_ae_out/udf_data/test/0_udf.npy")
+    data = np.load("/disk2/github/SuperUDF/data/0.npy")
     # data=data[0]
     # data = data[::4, ::4, ::4]
     # data = data[126:135, 106:115, 126:135]
     # data = np.sign(data)
     s = time.time()
     # mesh, new_data = udf_extractor(np.abs(data), data)
-    mesh_sdf = sdf_extractor(-data[0])
+    mesh_sdf = sdf_extractor(data)
     print(time.time()-s)
     mesh_sdf.export("0.off")
     # mesh_sdf.export("data/1b00f29471a41f59e92b1dc10fc46551.off")

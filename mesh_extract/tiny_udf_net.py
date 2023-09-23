@@ -49,9 +49,9 @@ def data_collection(data_list, result_file, strip = 2, train=False):
                     current_grid = np.concatenate([np.expand_dims(current_grid, axis=0), field], 0)
                     # min_udf = abs_data[i_idx+data_width//2-1:i_idx +data_width//2+2:2,
                     #           j_idx+data_width//2-1:j_idx+data_width//2+2:2, k_idx+data_width//2-1:k_idx +data_width//2+2:2].min()
-                    min_udf = current_grid[0].min()  #[1:3,1:3,1:3].min()
-                    max_udf = current_grid[0].max()
-                    if min_udf > 0.015 or max_udf >= 0.019:
+                    min_udf = np.abs(current_grid[0]).min()  #[1:3,1:3,1:3].min()
+                    max_udf = np.abs(current_grid[0]).max()
+                    if min_udf > 0.015 or max_udf >= 0.018:
                         continue
                     # grid = np.concatenate([np.expand_dims(current_grid, axis=0), data[1:,i_idx:i_idx + data_width, j_idx:j_idx + data_width, k_idx:k_idx + data_width]], 0)
                     # shift = np.expand_dims(np.array([i_idx, j_idx, k_idx]).astype(np.float32) / 2.0, axis=0)
@@ -253,7 +253,7 @@ def test(predict_path = "./data/npy/", cls="001"):
 
                 out = network(batch_data)
                 sign = network.predict(out, batch_label)
-
+                # sign = batch_label
                 global grid_dim
                 grid_dim = 256
 
@@ -418,9 +418,9 @@ if __name__ == '__main__':
     parser.add_argument("--train", action="store_true", dest="train", default=False,
                         help="True for training, False for testing [False]")
     args = parser.parse_args()
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     if args.train:
-        data_generation(cls="test")
+        data_generation(cls="train")
         train()
     else:
         test("samples/bsp_ae_out/udf_data/", cls="test")
