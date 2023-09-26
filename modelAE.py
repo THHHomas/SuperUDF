@@ -247,7 +247,7 @@ class BSP_AE(object):
 
                 chamfer, vanish_norm, L_near, chamfer_fine, norm, vertical_norm, normal_consistency = self.bsp_network.network_loss_orientation(
                     pc, pc2, scale, epoch=epoch)
-                loss = chamfer * 4 + vanish_norm + chamfer_fine * 0.5 + norm + vertical_norm + L_near + normal_consistency
+                loss = chamfer * 4 + vanish_norm + chamfer_fine*0.5 + norm + vertical_norm + L_near + normal_consistency
                 loss.backward()
                 self.optimizer.step()
                 avg_loss_sp += loss.item()
