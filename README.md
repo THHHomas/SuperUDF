@@ -21,7 +21,7 @@ Requirements:
 - TriMesh 3.12.9
 
 ## Datasets
-  We provide the processed dataset of ScanNet in [data.zip](https://pan.baidu.com/s/1CXPiXAbaW4gavEMjDs4RTg) (pwd: 1234). 
+  We provide the processed dataset of ScanNet in [data.zip](https://pan.baidu.com/s/1tBNYh9NQSnil7QigrNPqaQ) (pwd: qa8p). 
 After download the dataset, you should unzip it and put it in `./data/test.h5`.
 
 
